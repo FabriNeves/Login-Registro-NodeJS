@@ -1,0 +1,62 @@
+:root {
+    --main-bg-color: hsl(160, 0%, 28%);
+    --main-text-color: #F4A460;
+    --button-bg-color: #F4A460;
+    --button-text-color: hsl(160, 0%, 28%);
+    --button-hover-bg-color: #F5DEB3;
+}
+
+body {
+    background-color: var(--main-bg-color);
+    font-family: Arial, sans-serif;
+}
+
+p {
+    color: var(--main-text-color);
+    text-align: center;
+}
+
+.container {
+    width: 300px;
+    height: 250px;
+    background-color: var(--button-text-color);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 50px;
+    border: 1px solid var(--button-bg-color);
+    padding: 19px;
+    box-shadow: 1px 1px 2px black;
+}
+
+h1 {
+    text-align: center;
+    font-size: 36px;
+    color: var(--main-text-color);
+    margin-bottom: 30px;
+}
+
+
+.register-button,
+.login-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+  text-align: center;
+  background-color: var(--button-bg-color);
+  color: var(--button-text-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  text-decoration: none;
+}
+
+.register-button:hover,
+.login-button:hover {
+  background-color: var(--button-hover-bg-color);
+}

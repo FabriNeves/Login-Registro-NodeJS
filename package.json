@@ -1,0 +1,36 @@
+{
+  "name": "crud-2.0",
+  "version": "1.0.0",
+  "description": "Script para a criação de uma login page",
+  "main": "server.js",
+  "type":"module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev" : "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FaSn0w/CRUD-2.0.git"
+  },
+  "keywords": [
+    "login",
+    "mongoDB",
+    "Js"
+  ],
+  "author": "Fabricio Neves",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FaSn0w/CRUD-2.0/issues"
+  },
+  "homepage": "https://github.com/FaSn0w/CRUD-2.0#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.1",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "mongoose": "^6.9.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
