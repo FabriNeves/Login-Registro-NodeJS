@@ -1,42 +1,32 @@
 import express from "express";
 import bodyParser from "body-parser";
 import users from "./users.js";
+import path from 'path';
+import url from 'url';
+
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+console.log(__filename);
+console.log(__dirname);
+
 
 const app = express();
+app.use('/static', express.static(__dirname + '/public'));
 
 // Configura o middleware do body-parser - Usado para tranformar a string em objetos do javascript
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-    res.status(200).send('Bem vindo a pagina de login!');
+    res.status(200).sendFile(__dirname+"/front-end/index.html");
 });
 
 app.get('/login', (req, res) => {
-    res.status(200).send(`
-      <form method="post" action="/login">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username">
-  
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password">
-  
-        <button type="submit">Login</button>
-      </form>
-    `);
+  res.status(200).sendFile(__dirname+"/front-end/login.html");
 });
 
 app.get('/register', (req, res) => {
-    res.status(200).send(`
-      <form method="post" action="/register">
-        <label for="username">Usuario</label>
-        <input type="text" id="username" name="username">
-  
-        <label for="password">Senha</label>
-        <input type="password" id="password" name="password">
-  
-        <button type="submit">Register</button>
-      </form>
-    `);
+    res.status(200).sendFile(__dirname+"/front-end/registro.html");
 });
 
 // Define a rota para o processamento do formulário de login
