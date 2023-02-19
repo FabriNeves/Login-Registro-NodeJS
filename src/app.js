@@ -1,9 +1,10 @@
 import express from "express";
 import bodyParser from "body-parser";
 import db from "./config/mongoConection.js";
-import users from "../users.js";
+import users from "../users.js";//só pra test
 import path from 'path';
 import url from 'url';
+import bcrypt from 'bcrypt';
 import registroController from "./controllers/UserControllers.js";
 
 db.on("error", console.log.bind(console, "Erro de conexão...")); // bind = ligar , conectar.
@@ -18,7 +19,7 @@ const __dirname = path.join(baseDir, '..');
 
 const app = express();
 app.use('/css', express.static(__dirname + '/front-end/css'));
-app.use('/js',express.static(__dirname + '/front-end/js'))
+app.use('/js', express.static(__dirname + '/front-end/js'))
 
 // Configura o middleware do body-parser - Usado para tranformar a string em objetos do javascript
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -54,27 +55,23 @@ app.post('/login', async (req, res) => {
 });
 
 // Define a rota para o processamento do formulário de registro
-app.post('/register', (req, res) => {
-    const { username, email, password, "confirm-password": confirmPassword } = req.body;
-    // Aqui foi usada a desestruturação ES6 para criar constantes a partir do objeto req.body porem devido ao Javascript 
-    // não ser convencional usar variaveis com hifen , foi renomeado para confirmPassword. 
+app.post('/register', async (req, res) => {
+    try {
+        const { username, email, password, "confirm-password": confirmPassword } = req.body;
+        // Aqui foi usada a desestruturação ES6 para criar constantes a partir do objeto req.body porem devido ao Javascript 
+        // não ser convencional usar variaveis com hifen , foi renomeado para confirmPassword. 
 
-    if (password !== confirmPassword) {
-        return res.status(400).send('As senhas não conferem!');
-    }
+        if (password !== confirmPassword) {
+            return res.status(400).send('<h1>As senhas não conferem!</h1><a href="/login">Login</a>');
+        }
+        const hashedPassword = await  bcrypt.hash(password,10);
+        // verificar se o já existe;
+        registroController.cadastrarUser({ username, email, hashedPassword });
+        res.send('<h1>Usuário registrado com sucesso!</h1><a href="/login">Login</a>');
+    } catch {
+        res.status(500).send('<h1>Algo errado não esta certo</h1>');
+    }   
 
-    const existingUser = users.find(user => user.username === username);
-
-    if (existingUser) {
-        return res.status(409).send('Usuário já existe!');
-    }
-
-    // Adiciona o novo usuário ao array de usuários
-    users.push({ username, email, password });    
-    registroController.cadastrarUser({ username, email, password });
-
-
-    res.send('Usuário registrado com sucesso!');
 });
 
 // Exporta a instância do servidor
