@@ -13,7 +13,7 @@ form.addEventListener('submit', (event) => {
     event.preventDefault();
 
     // Valida o nome de usuário
-    // trim() remove os espaços do valor de username deixando somente letras e numeros
+    // trim() remove os espaços do valor de username deixando somente letras e numeros(no começo e no fim)
     if (usernameInput.value.trim() === '') {
         alert('Por favor, preencha o nome de usuário.');
         return;

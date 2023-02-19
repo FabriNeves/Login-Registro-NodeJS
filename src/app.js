@@ -1,19 +1,20 @@
 import express from "express";
 import bodyParser from "body-parser";
+import db from "./config/mongoConection.js";
 import users from "../users.js";
 import path from 'path';
 import url from 'url';
+import registroController from "./controllers/UserControllers.js";
 
-
+db.on("error", console.log.bind(console, "Erro de conexão...")); // bind = ligar , conectar.
+db.once("open", () => console.log("Conexão com o banco de dados estabelecida."));
 
 const __filename = url.fileURLToPath(import.meta.url);
 const baseDir = path.dirname(__filename);
 const __dirname = path.join(baseDir, '..');
 // atribuir a dirname o diretorio acima deste.
-
-
-console.log(__filename);
-console.log(__dirname);
+//console.log(__filename);
+//console.log(__dirname);
 
 const app = express();
 app.use('/css', express.static(__dirname + '/front-end/css'));
@@ -39,19 +40,16 @@ app.get("/dev", (req, res) => {
 })
 
 // Define a rota para o processamento do formulário de login
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
     const { username, password } = req.body;
+    const validacao = await registroController.verificaUsuario(username, password);
 
-    const user = users.find(user => user.username === username && user.password === password);
-    // metodo find usa uma callback function para retornar o objeto usuario , caso o mesmo tenha igualdade entre usario e senha; 
-    // como o retorno da função find se não achar nenhum elemento é undefined , podemos usar para verificar o if abaixo;
-
-    if (user) {
+    if (validacao.bool) {
         // Retorna a mensagem de sucesso para o usuário
         res.send('Login efetuado com sucesso!');
     } else {
         // Retorna uma mensagem de erro para o usuário
-        res.status(401).send('Usuário ou senha inválidos!');
+        res.status(401).send(validacao.message);
     }
 });
 
@@ -72,7 +70,9 @@ app.post('/register', (req, res) => {
     }
 
     // Adiciona o novo usuário ao array de usuários
-    users.push({ username, email, password });
+    users.push({ username, email, password });    
+    registroController.cadastrarUser({ username, email, password });
+
 
     res.send('Usuário registrado com sucesso!');
 });
