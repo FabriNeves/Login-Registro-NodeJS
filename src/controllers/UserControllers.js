@@ -38,14 +38,3 @@ class registroController {
 
 export default registroController;
 
-async function verificaUsuario(username, password) {
-    const user = await User.findOne({ username });
-    if (!user) {
-        return { bool: false, message: 'Nome de usuário inválido!' };
-    }
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-        return { bool: false, message: 'Senha incorreta!' };
-    }
-    return { bool: true, message: 'Login bem sucedido!' };
-}
